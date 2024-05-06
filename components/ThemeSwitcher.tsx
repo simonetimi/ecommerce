@@ -6,7 +6,7 @@ import { MoonIcon } from '@heroicons/react/24/outline';
 import { Switch } from '@nextui-org/react';
 import { useTheme } from 'next-themes';
 
-export default function ThemeSwitcher({ className }: { className: string }) {
+export default function ThemeSwitcher({ className }: { className?: string }) {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme, systemTheme } = useTheme();
 
