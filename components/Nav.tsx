@@ -19,16 +19,17 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
 export default Nav;
 
 export const NavLink = (
-  props: Omit<ComponentProps<typeof Button>, 'className'>,
+  props: Omit<ComponentProps<typeof Button>, 'className'> & { main?: string },
 ) => {
   const pathname = usePathname();
+  const mainPathCondition = props.main === pathname ? 'primary' : 'default';
+  const otherPathsCondition =
+    props.href && pathname.startsWith(props.href) ? 'primary' : 'default';
 
   return (
     <Button
       {...props}
-      color={
-        props.href && pathname.startsWith(props.href) ? 'primary' : 'default'
-      }
+      color={props.main ? mainPathCondition : otherPathsCondition}
       size="md"
       variant="solid"
       as={Link}

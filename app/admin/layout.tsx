@@ -19,23 +19,23 @@ export default function AdminLayout({
 
   return (
     <>
-      <header className="flex">
-        <Nav>
-          <NavLink href="/admin/dashboard">Dashboard</NavLink>
-          <NavLink href="/admin/products">Products</NavLink>
-          <NavLink href="/admin/users">Customers</NavLink>
-          <NavLink href="/admin/orders">Sales</NavLink>
-          <div className="ml-auto flex items-center gap-x-2">
-            <NavLink href="/">Back to the shop</NavLink>
-            <ThemeSwitcher className="ml-2" />
-            <UserButton
-              appearance={{
-                elements: { rootBox: 'justify-end' },
-              }}
-            />
-          </div>
-        </Nav>
-      </header>
+      <Nav>
+        <NavLink href="/admin" main="/admin">
+          Dashboard
+        </NavLink>
+        <NavLink href="/admin/products">Products</NavLink>
+        <NavLink href="/admin/users">Customers</NavLink>
+        <NavLink href="/admin/orders">Sales</NavLink>
+        <div className="ml-auto flex items-center gap-x-2">
+          <NavLink href="/">Back to the shop</NavLink>
+          <ThemeSwitcher className="ml-2" />
+          <UserButton
+            appearance={{
+              elements: { rootBox: 'justify-end' },
+            }}
+          />
+        </div>
+      </Nav>
       <main className="flex flex-col p-6">{children}</main>
     </>
   );
