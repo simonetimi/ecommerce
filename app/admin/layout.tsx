@@ -26,7 +26,7 @@ export default function AdminLayout({
           <NavLink href="/admin/users">Customers</NavLink>
           <NavLink href="/admin/orders">Sales</NavLink>
           <div className="ml-auto flex items-center gap-x-2">
-            <NavLink href="/shop">Back to the shop</NavLink>
+            <NavLink href="/">Back to the shop</NavLink>
             <ThemeSwitcher className="ml-2" />
             <UserButton
               appearance={{
