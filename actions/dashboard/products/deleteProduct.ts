@@ -4,6 +4,7 @@ import fs from 'fs/promises';
 import { revalidatePath } from 'next/cache';
 
 import prisma from '@/utils/db';
+import { checkRole } from '@/utils/roles';
 
 interface Response {
   success: string;
@@ -13,6 +14,8 @@ export const deleteProduct = async (productData: {
   id: string;
 }): Promise<Response> => {
   try {
+    if (!checkRole('admin')) throw new Error('Unauthorized');
+
     const product = await prisma.product.delete({
       where: {
         id: productData.id,

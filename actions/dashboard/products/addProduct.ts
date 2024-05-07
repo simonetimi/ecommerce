@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache';
 
 import { AddProductSchema } from '@/schemas/schemas';
 import prisma from '@/utils/db';
+import { checkRole } from '@/utils/roles';
 
 interface Response {
   success: string;
@@ -13,6 +14,8 @@ interface Response {
 
 export const addProduct = async (formData: FormData): Promise<Response> => {
   try {
+    if (!checkRole('admin')) throw new Error('Unauthorized');
+
     // get data from formData
     const values = Object.fromEntries(formData.entries());
 
