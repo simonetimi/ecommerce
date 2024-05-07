@@ -3,7 +3,7 @@ import { auth } from '@clerk/nextjs/server';
 import { Button } from '@nextui-org/react';
 import Link from 'next/link';
 
-import SigninButton from '@/app/shop/_components/signin-button';
+import SigninButton from '@/app/(shop)/_components/signin-button';
 import ThemeSwitcher from '@/components/ThemeSwitcher';
 import { checkRole } from '@/utils/roles';
 
