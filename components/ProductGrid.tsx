@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowLongRightIcon } from '@heroicons/react/24/outline';
 import { Card, CardBody, CardFooter } from '@nextui-org/card';
+import { Pagination } from '@nextui-org/pagination';
 import { Button, Image } from '@nextui-org/react';
 import { Product } from '@prisma/client';
 import Link from 'next/link';
@@ -13,26 +14,33 @@ import { formatCurrency } from '@/lib/formatters';
 const ProductGrid = ({
   title,
   fetchFn,
+  pagination,
+  pages,
 }: {
   title: string;
-  fetchFn: () => Promise<Product[]>;
+  fetchFn: (page?: number) => Promise<Product[]>;
+  pagination?: boolean;
+  pages?: number;
 }) => {
   const [products, setProducts] = useState<Product[] | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     (async () => {
-      const response = await fetchFn();
+      const response = await fetchFn(currentPage);
       setProducts(response);
     })();
-  }, [fetchFn]);
+  }, [fetchFn, currentPage]);
 
   return (
-    <div className="w-full px-14 py-4">
+    <div className="flex w-full flex-col px-14 py-4">
       <div className="flex gap-x-4 pb-4">
         <p className="text-2xl">{title}</p>
-        <Button as={Link} variant="ghost" href="/products">
-          View all <ArrowLongRightIcon className="h-4 w-4" />
-        </Button>
+        {!pagination && (
+          <Button as={Link} variant="ghost" href="/products">
+            View all <ArrowLongRightIcon className="h-4 w-4" />
+          </Button>
+        )}
       </div>
       <div className="flex flex-row flex-wrap items-center gap-6 pb-6">
         {!products
@@ -60,6 +68,15 @@ const ProductGrid = ({
               </Card>
             ))}
       </div>
+      {pagination && (
+        <Pagination
+          total={pages || 1}
+          color="primary"
+          page={currentPage}
+          onChange={setCurrentPage}
+          className="mt-4 self-center"
+        />
+      )}
     </div>
   );
 };
