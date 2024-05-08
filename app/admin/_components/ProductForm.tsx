@@ -14,7 +14,7 @@ import { editProduct } from '@/actions/dashboard/products/editProduct';
 import FileInput from '@/components/FileInput';
 import { AddProductSchema, EditProductSchema } from '@/schemas/schemas';
 
-const ProductForm = ({ product }: { product: Product | null }) => {
+const ProductForm = ({ product }: { product?: Product | null }) => {
   const [isPending, startTransition] = useTransition();
   const [resetFileUploadComponent, setResetFileUploadComponent] =
     useState(false);
