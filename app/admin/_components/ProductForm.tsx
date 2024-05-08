@@ -86,7 +86,7 @@ const ProductForm = ({ product }: { product?: Product | null }) => {
   };
 
   return (
-    <Card className="flex w-full flex-col items-center justify-center py-4">
+    <Card className="flex w-full flex-col items-center justify-center py-4 dark:bg-slate-700/40">
       <CardBody className="w-full md:w-2/3">
         <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
           <Controller

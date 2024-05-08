@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useTransition } from 'react';
+import React, { useEffect, useState, useTransition } from 'react';
 import {
   ArrowDownOnSquareIcon,
   CheckCircleIcon,
@@ -9,6 +9,7 @@ import {
   TrashIcon,
   XCircleIcon,
 } from '@heroicons/react/24/outline';
+import { Pagination } from '@nextui-org/pagination';
 import {
   Button,
   Dropdown,
@@ -23,7 +24,7 @@ import {
   TableRow,
   useDisclosure,
 } from '@nextui-org/react';
-import Link from 'next/link';
+import { Product } from '@prisma/client';
 import { toast } from 'sonner';
 
 import { changeProductAvailability } from '@/actions/dashboard/products/changeProductAvailability';
@@ -39,10 +40,25 @@ interface ProductsProp {
   _count: { Orders: number };
 }
 
-const ProductsTable = ({ products = [] }: { products: ProductsProp[] }) => {
+const ProductsTable = ({
+  fetchFn,
+  pages,
+}: {
+  fetchFn: (page?: number) => Promise<ProductsProp[]>;
+  pages?: number;
+}) => {
   const [isPending, startTransition] = useTransition();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selectedProductId, setSelectedProductId] = useState('');
+  const [products, setProducts] = useState<ProductsProp[] | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetchFn(currentPage);
+      setProducts(response);
+    })();
+  }, [fetchFn, currentPage]);
 
   const handleProductDelete = async () => {
     const productData = {
@@ -61,10 +77,10 @@ const ProductsTable = ({ products = [] }: { products: ProductsProp[] }) => {
     });
   };
 
-  if (products.length < 1) return <p>No products found.</p>;
+  if (!products) return <p>No products found.</p>;
 
   return (
-    <>
+    <div className="flex w-full flex-col items-center">
       <ConfirmModal
         action={handleProductDelete}
         isOpen={isOpen}
@@ -199,7 +215,17 @@ const ProductsTable = ({ products = [] }: { products: ProductsProp[] }) => {
           ))}
         </TableBody>
       </Table>
-    </>
+      {pages && (
+        <Pagination
+          total={pages || 1}
+          color="primary"
+          page={currentPage}
+          onChange={setCurrentPage}
+          className="mt-4 self-center"
+          classNames={{ item: 'dark:bg-slate-600/60' }}
+        />
+      )}
+    </div>
   );
 };
 
