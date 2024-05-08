@@ -48,7 +48,10 @@ const ProductGrid = ({
               <SkeletonProductCard key={index} />
             ))
           : products?.map((product) => (
-              <Card key={product.id} className="h-[270px] w-[310px] shadow-md">
+              <Card
+                key={product.id}
+                className="h-[270px] w-[310px] shadow-md dark:border dark:border-gray-600/60 dark:bg-slate-700/60"
+              >
                 <CardBody className="items-center justify-center">
                   <Image
                     alt={product.name}
@@ -75,6 +78,7 @@ const ProductGrid = ({
           page={currentPage}
           onChange={setCurrentPage}
           className="mt-4 self-center"
+          classNames={{ item: 'dark:bg-slate-600/60' }}
         />
       )}
     </div>

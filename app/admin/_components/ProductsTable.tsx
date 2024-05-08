@@ -70,7 +70,13 @@ const ProductsTable = ({ products = [] }: { products: ProductsProp[] }) => {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
       />
-      <Table aria-label="Products table">
+      <Table
+        aria-label="Products table"
+        classNames={{
+          wrapper: 'dark:bg-slate-700/60',
+          th: 'dark:bg-slate-600',
+        }}
+      >
         <TableHeader>
           <TableColumn className="w-0">
             <span className="sr-only">Available</span>
