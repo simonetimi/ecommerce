@@ -7,6 +7,8 @@ import { Pagination } from '@nextui-org/pagination';
 import { Button, Image } from '@nextui-org/react';
 import { Product } from '@prisma/client';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import SkeletonProductCard from '@/components/SkeletonProductCard';
 import { formatCurrency } from '@/lib/formatters';
@@ -22,15 +24,17 @@ const ProductGrid = ({
   pagination?: boolean;
   pages?: number;
 }) => {
+  const router = useRouter();
   const [products, setProducts] = useState<Product[] | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const searchParams = useSearchParams();
+  const page = searchParams.get('page') || 1;
 
   useEffect(() => {
     (async () => {
-      const response = await fetchFn(currentPage);
+      const response = await fetchFn(Number(page));
       setProducts(response);
     })();
-  }, [fetchFn, currentPage]);
+  }, [fetchFn, page]);
 
   return (
     <div className="flex w-full flex-col px-14 py-4">
@@ -75,8 +79,11 @@ const ProductGrid = ({
         <Pagination
           total={pages || 1}
           color="primary"
-          page={currentPage}
-          onChange={setCurrentPage}
+          page={Number(page)}
+          defaultValue={1}
+          onChange={(newPage) =>
+            router.push(`/products?page=${newPage?.toString()}`)
+          }
           className="mt-4 self-center"
           classNames={{ item: 'dark:bg-slate-600/60' }}
         />
