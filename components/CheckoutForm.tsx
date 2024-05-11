@@ -7,7 +7,6 @@ import { Button, Image, Spinner } from '@nextui-org/react';
 import { Product } from '@prisma/client';
 import {
   Elements,
-  LinkAuthenticationElement,
   PaymentElement,
   useElements,
   useStripe,
@@ -98,7 +97,7 @@ function Form({
         .confirmPayment({
           elements,
           confirmParams: {
-            return_url: `${process.env.NEXT_PUBLIC_DOMAIN_URL}/stripe/purchase-success`,
+            return_url: `${process.env.NEXT_PUBLIC_DOMAIN_URL}/products/stripe/purchase-success`,
           },
         })
         .then(({ error }) => {
@@ -125,16 +124,13 @@ function Form({
         </CardBody>
         <CardFooter>
           <Button
+            spinner={isPending}
             className="w-full"
             type="submit"
             disabled={!stripe || !elements || isPending}
             color="primary"
           >
-            {isPending ? (
-              <Spinner color="white" size="md" />
-            ) : (
-              `Purchase - ${formatCurrency(priceInCents / 100)}`
-            )}
+            Purchase - {formatCurrency(priceInCents / 100)}
           </Button>
         </CardFooter>
       </Card>
