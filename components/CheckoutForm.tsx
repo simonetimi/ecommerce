@@ -1,11 +1,13 @@
 'use client';
 
 import { FormEvent, useTransition } from 'react';
+import { useUser } from '@clerk/nextjs';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Button, Image, Spinner } from '@nextui-org/react';
 import { Product } from '@prisma/client';
 import {
   Elements,
+  LinkAuthenticationElement,
   PaymentElement,
   useElements,
   useStripe,
@@ -14,6 +16,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useTheme } from 'next-themes';
 import { toast } from 'sonner';
 
+import { userOrderExists } from '@/actions/shop/orders';
 import { formatCurrency } from '@/lib/formatters';
 
 const CheckoutForm = ({
@@ -53,7 +56,7 @@ const CheckoutForm = ({
           }}
           stripe={stripePromise}
         >
-          <Form priceInCents={product.priceInCents} />
+          <Form priceInCents={product.priceInCents} productId={product.id} />
         </Elements>
       </section>
     </main>
@@ -62,21 +65,40 @@ const CheckoutForm = ({
 
 export default CheckoutForm;
 
-function Form({ priceInCents }: { priceInCents: number }) {
+function Form({
+  priceInCents,
+  productId,
+}: {
+  priceInCents: number;
+  productId: string;
+}) {
   const stripe = useStripe();
   const elements = useElements();
   const [isPending, startTransition] = useTransition();
+  const { user } = useUser();
 
-  const handleSubmit = (event: FormEvent) => {
+  if (!user) return null;
+
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    if (!stripe || !elements) return null;
-    // TODO: check for existing order
+    if (!stripe || !elements || !user.primaryEmailAddress) return null;
+
+    const orderExists = await userOrderExists(
+      user.primaryEmailAddress.emailAddress,
+      productId,
+    );
+
+    if (orderExists)
+      return toast.error(
+        'Product already purchased. Check your orders in the relative section!',
+      );
+
     startTransition(() => {
       stripe
         .confirmPayment({
           elements,
           confirmParams: {
-            return_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/stripe/purchase-success`,
+            return_url: `${process.env.NEXT_PUBLIC_DOMAIN_URL}/stripe/purchase-success`,
           },
         })
         .then(({ error }) => {
@@ -86,7 +108,7 @@ function Form({ priceInCents }: { priceInCents: number }) {
           ) {
             toast.error(error.message);
           } else {
-            toast.error('Unknown error occurred.');
+            toast.error(error.message);
           }
         });
     });
@@ -98,7 +120,7 @@ function Form({ priceInCents }: { priceInCents: number }) {
         <CardHeader>
           <h1 className="text-xl">Payment checkout</h1>
         </CardHeader>
-        <CardBody>
+        <CardBody className="space-y-4">
           <PaymentElement />
         </CardBody>
         <CardFooter>
@@ -109,7 +131,7 @@ function Form({ priceInCents }: { priceInCents: number }) {
             color="primary"
           >
             {isPending ? (
-              <Spinner />
+              <Spinner color="white" size="md" />
             ) : (
               `Purchase - ${formatCurrency(priceInCents / 100)}`
             )}
