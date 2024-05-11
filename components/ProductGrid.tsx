@@ -68,7 +68,12 @@ const ProductGrid = ({
                   <p className="p-1">
                     {formatCurrency(product.priceInCents / 100)}
                   </p>
-                  <Button color="primary" className="w-full rounded-md">
+                  <Button
+                    as={Link}
+                    href={`/products/${product.id}/purchase`}
+                    color="primary"
+                    className="w-full rounded-md"
+                  >
                     Purchase
                   </Button>
                 </CardFooter>
