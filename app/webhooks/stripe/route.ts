@@ -22,7 +22,6 @@ export async function POST(req: NextRequest) {
     const product = await prisma.product.findUnique({
       where: { id: productId },
     });
-    console.log(email);
     if (!product || !email)
       return new NextResponse('Bad Request', { status: 400 });
 
@@ -42,7 +41,7 @@ export async function POST(req: NextRequest) {
         expiredAt: new Date(Date.now() + 1000 * 60 * 60 * 24),
       },
     });
-    await sendOrderEmail(email);
+    await sendOrderEmail(email, order, product, downloadVerification.id);
   }
 
   return new NextResponse();

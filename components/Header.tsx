@@ -1,18 +1,11 @@
 import { UserButton } from '@clerk/nextjs';
 import { auth } from '@clerk/nextjs/server';
 import {
-  Bars3Icon,
   BuildingStorefrontIcon,
   HomeIcon,
   ShoppingBagIcon,
 } from '@heroicons/react/24/outline';
-import {
-  Button,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-} from '@nextui-org/react';
+import { Button } from '@nextui-org/react';
 import Link from 'next/link';
 
 import SigninButton from '@/app/(shop)/_components/signin-button';
