@@ -1,5 +1,4 @@
 import CustomersTable from '@/app/admin/_components/CustomersTable';
-import ProductsSection from '@/app/admin/_components/ProductSection';
 import prisma from '@/utils/db';
 
 const CustomersPage = async () => {
@@ -22,7 +21,7 @@ const CustomersPage = async () => {
 
   return (
     <main className="w-full self-center lg:w-[900px]">
-      <ProductsSection />
+      <h1 className="text-3xl">Customers</h1>
       <section className="flex w-full items-center justify-center py-6">
         <CustomersTable fetchFn={getUsers} pages={totalPages} />
       </section>
