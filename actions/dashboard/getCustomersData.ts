@@ -6,7 +6,7 @@ const getCustomersData = async () => {
   const [userCount, orderData] = await Promise.all([
     await prisma.user.count(),
     await prisma.order.aggregate({
-      _sum: { pricePaidInCent: true },
+      _sum: { pricePaidInCents: true },
     }),
   ]);
 
@@ -15,7 +15,7 @@ const getCustomersData = async () => {
     averageValuePerUser:
       userCount === 0
         ? 0
-        : (orderData._sum.pricePaidInCent || 0) / userCount / 100,
+        : (orderData._sum.pricePaidInCents || 0) / userCount / 100,
   };
 };
 

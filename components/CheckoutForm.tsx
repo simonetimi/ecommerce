@@ -3,10 +3,11 @@
 import { FormEvent, useTransition } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
-import { Button, Image, Spinner } from '@nextui-org/react';
+import { Button, Image } from '@nextui-org/react';
 import { Product } from '@prisma/client';
 import {
   Elements,
+  LinkAuthenticationElement,
   PaymentElement,
   useElements,
   useStripe,
@@ -121,6 +122,13 @@ function Form({
         </CardHeader>
         <CardBody className="space-y-4">
           <PaymentElement />
+          <LinkAuthenticationElement
+            options={{
+              defaultValues: {
+                email: user?.primaryEmailAddress?.emailAddress || '',
+              },
+            }}
+          />
         </CardBody>
         <CardFooter>
           <Button

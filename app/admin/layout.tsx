@@ -24,7 +24,7 @@ export default function AdminLayout({
           Dashboard
         </NavLink>
         <NavLink href="/admin/products">Products</NavLink>
-        <NavLink href="/admin/users">Customers</NavLink>
+        <NavLink href="/admin/customers">Customers</NavLink>
         <NavLink href="/admin/orders">Sales</NavLink>
         <div className="ml-auto flex items-center gap-x-2">
           <NavLink href="/">Back to the shop</NavLink>

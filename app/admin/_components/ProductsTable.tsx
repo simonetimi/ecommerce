@@ -24,7 +24,6 @@ import {
   TableRow,
   useDisclosure,
 } from '@nextui-org/react';
-import { Product } from '@prisma/client';
 import { toast } from 'sonner';
 
 import { changeProductAvailability } from '@/actions/dashboard/products/changeProductAvailability';
